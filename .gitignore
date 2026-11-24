@@ -1,0 +1,10 @@
+# Datos sensibles (rostros, embeddings, base de datos, reportes)
+data/
+reports/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env

@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>ClassLY Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/css/styles.css?v=26"
+    >
+
+</head>
+
+
+<body>
+
+<main class="app">
+
+
+    <!-- ========================================= -->
+    <!-- HEADER -->
+    <!-- ========================================= -->
+
+    <header class="header">
+
+        <div class="brand">
+
+            <img
+                src="/static/assets/classly-logo.png"
+                alt="ClassLY"
+                class="brand-logo"
+            >
+
+
+        </div>
+
+
+        <div class="status">
+
+            <span class="status-dot"></span>
+
+            <span>
+                System Active
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <!-- ========================================= -->
+    <!-- DECISION STAGE NAVIGATION -->
+    <!-- ========================================= -->
+
+    <nav class="stage-nav">
+
+        <a href="/" class="active">
+            During Class
+            <small>Stage 1 · Professor</small>
+        </a>
+
+        <a href="/analytics">
+            After Class
+            <small>Stage 2 · Professor</small>
+        </a>
+
+        <a href="/coordinator">
+            End of Course
+            <small>Stage 3 · Coordinator</small>
+        </a>
+
+    </nav>
+
+
+
+
+    <!-- ========================================= -->
+    <!-- HERO -->
+    <!-- ========================================= -->
+
+    <section class="hero-card">
+
+        <h1>
+            Welcome to ClassLy
+        </h1>
+
+
+        <!-- CLASS CONFIGURATION -->
+
+        <div class="class-form">
+
+            <div class="form-field">
+
+                <label for="subject-input">
+                    Subject
+                </label>
+
+                <input
+                    type="text"
+                    id="subject-input"
+                    list="subject-options"
+                    placeholder="Enter subject name"
+                    autocomplete="off"
+                >
+
+                <datalist id="subject-options"></datalist>
+
+            </div>
+
+
+            <div class="form-field">
+
+                <label for="class-date">
+                    Class Date
+                </label>
+
+                <input
+                    type="date"
+                    id="class-date"
+                >
+
+            </div>
+
+
+            <div class="form-field">
+
+                <label for="class-quarter">
+                    Quarter / Semester
+                </label>
+
+                <select id="class-quarter"></select>
+
+            </div>
+
+
+            <div class="form-field">
+
+                <label for="class-group">
+                    Group
+                </label>
+
+                <select id="class-group"></select>
+
+            </div>
+
+        </div>
+
+
+        <!-- SESSION INFORMATION -->
+
+        <div
+            id="selected-class-info"
+            class="selected-class-info"
+        >
+            Enter a subject and select a date.
+        </div>
+
+
+        <div class="session-info">
+
+            <div class="session-item">
+
+                <span>
+                    Started
+                </span>
+
+                <strong id="session-start">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="session-item">
+
+                <span>
+                    Ended
+                </span>
+
+                <strong id="session-end">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="session-item">
+
+                <span>
+                    Duration
+                </span>
+
+                <strong id="session-duration">
+                    00:00:00
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTION BUTTONS -->
+
+        <div class="hero-actions">
+
+            <button
+                id="start-class-button"
+                class="primary-button"
+                onclick="startClass()"
+            >
+                Start Class
+            </button>
+
+
+            <button
+                id="stop-class-button"
+                class="secondary-button"
+                onclick="stopClass()"
+                disabled
+            >
+                Stop Class
+            </button>
+
+
+            <button
+                id="reset-class-button"
+                class="danger-button"
+                onclick="resetClassData()"
+            >
+                Reset Class Data
+            </button>
+
+
+            <a
+                id="export-button"
+                class="secondary-button"
+                href="#"
+            >
+                Export Excel
+            </a>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ========================================= -->
+    <!-- SUMMARY CARDS -->
+    <!-- ========================================= -->
+
+    <section class="stats">
+
+
+        <article class="stat-card">
+
+            <span>👥</span>
+
+            <strong id="total-students">
+                0
+            </strong>
+
+            <small>
+                Students
+            </small>
+
+        </article>
+
+
+        <article class="stat-card">
+
+            <span>✓</span>
+
+            <strong id="present-students">
+                0
+            </strong>
+
+            <small>
+                Present
+            </small>
+
+        </article>
+
+
+        <article class="stat-card">
+
+            <span>◐</span>
+
+            <strong id="partial-students">
+                0
+            </strong>
+
+            <small>
+                Partial
+            </small>
+
+        </article>
+
+
+        <article class="stat-card">
+
+            <span>○</span>
+
+            <strong id="absent-students">
+                0
+            </strong>
+
+            <small>
+                Absent
+            </small>
+
+        </article>
+
+
+        <article class="stat-card">
+
+            <span>⚠️</span>
+
+            <strong id="intruders">
+                0
+            </strong>
+
+            <small>
+                Intruders
+            </small>
+
+        </article>
+
+
+        <article class="stat-card">
+
+            <span>◷</span>
+
+            <strong id="class-duration-card">
+                00:00
+            </strong>
+
+            <small>
+                Class Duration
+            </small>
+
+        </article>
+
+    </section>
+
+
+
+    <!-- ========================================= -->
+    <!-- GENERAL SUMMARY -->
+    <!-- ========================================= -->
+
+    <section class="dashboard-grid">
+
+
+        <article class="info-card">
+
+            <h3>
+                Overall Attendance
+            </h3>
+
+
+            <div class="percentage">
+
+                <strong
+                    id="attendance-percentage"
+                >
+                    0%
+                </strong>
+
+                <span>
+                    Average attendance
+                </span>
+
+            </div>
+
+
+            <div class="progress">
+
+                <div
+                    id="attendance-progress"
+                    class="progress-bar"
+                ></div>
+
+            </div>
+
+        </article>
+
+
+        <article class="info-card">
+
+            <h3>
+                Entry & Exit Activity
+            </h3>
+
+
+            <div class="activity-row">
+
+                <span>
+                    Total Entries
+                </span>
+
+                <strong id="total-entries-summary">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="activity-row">
+
+                <span>
+                    Total Exits
+                </span>
+
+                <strong id="total-exits-summary">
+                    0
+                </strong>
+
+            </div>
+
+        </article>
+
+    </section>
+
+
+
+    <!-- ========================================= -->
+    <!-- ATTENDANCE CHART -->
+    <!-- ========================================= -->
+
+    <section class="info-card chart-card">
+
+        <h3>
+            Attendance Percentage by Student
+        </h3>
+
+        <p class="chart-description">
+            Percentage of the actual class session
+            spent inside the classroom.
+        </p>
+
+
+        <div
+            id="attendance-chart"
+            class="chart-container"
+        ></div>
+
+    </section>
+
+
+
+    <!-- ========================================= -->
+    <!-- ENTRY / EXIT CHART -->
+    <!-- ========================================= -->
+
+    <section class="info-card chart-card">
+
+        <h3>
+            Entry & Exit Events by Student
+        </h3>
+
+        <p class="chart-description">
+            Number of facial-recognition entry
+            and exit events recorded during the session.
+        </p>
+
+
+        <div class="legend">
+
+            <span>
+
+                <i class="legend-entry"></i>
+
+                Entries
+
+            </span>
+
+
+            <span>
+
+                <i class="legend-exit"></i>
+
+                Exits
+
+            </span>
+
+        </div>
+
+
+        <div
+            id="entry-exit-chart"
+            class="chart-container"
+        ></div>
+
+    </section>
+
+
+
+    <!-- ========================================= -->
+    <!-- INSIDE / OUTSIDE TIME -->
+    <!-- ========================================= -->
+
+    <section class="info-card chart-card">
+
+        <h3>
+            Inside vs. Outside Time
+        </h3>
+
+        <p class="chart-description">
+            Time spent inside and outside the
+            classroom during the actual session.
+        </p>
+
+
+        <div class="legend">
+
+            <span>
+
+                <i class="legend-inside"></i>
+
+                Inside
+
+            </span>
+
+
+            <span>
+
+                <i class="legend-outside"></i>
+
+                Outside
+
+            </span>
+
+        </div>
+
+
+        <div
+            id="time-chart"
+            class="chart-container"
+        ></div>
+
+    </section>
+
+
+
+    <!-- ========================================= -->
+    <!-- LIVE OCCUPANCY -->
+    <!-- ========================================= -->
+
+    <section class="info-card chart-card">
+
+        <h3>
+            Live Classroom Occupancy
+        </h3>
+
+        <p class="chart-description">
+            How many students are inside the classroom as the
+            session advances. A sudden drop while the class is
+            running is the signal the professor needs in the
+            moment, not after the class.
+        </p>
+
+        <div
+            id="live-occupancy-chart"
+            class="chart-container"
+        ></div>
+
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- STUDENT TABLE -->
+    <!-- ========================================= -->
+
+    <section class="info-card">
+
+        <h3>
+            Student Attendance Details
+        </h3>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Student
+                        </th>
+
+                        <th>
+                            Code
+                        </th>
+
+                        <th>
+                            Entries
+                        </th>
+
+                        <th>
+                            Exits
+                        </th>
+
+                        <th>
+                            Inside
+                        </th>
+
+                        <th>
+                            Outside
+                        </th>
+
+                        <th>
+                            Attendance
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="student-table-body"
+                ></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ========================================= -->
+    <!-- SYSTEM STATUS -->
+    <!-- ========================================= -->
+
+    <section class="info-card">
+
+        <h3>
+            System Status
+        </h3>
+
+
+        <div class="info-row">
+
+            <span>
+                Database
+            </span>
+
+            <strong>
+                SQLite ✓
+            </strong>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <span>
+                Facial Recognition
+            </span>
+
+            <strong>
+                Active ✓
+            </strong>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <span>
+                Camera
+            </span>
+
+            <strong>
+                Ready ✓
+            </strong>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- ========================================= -->
+<!-- JAVASCRIPT -->
+<!-- ========================================= -->
+
+<script src="/static/js/vendor/plotly.min.js"></script>
+
+<script src="/static/js/dashboard.js?v=26"></script>
+
+
+</body>
+
+</html>
